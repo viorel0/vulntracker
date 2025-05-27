@@ -208,7 +208,7 @@ def virus_scan_view(request):
 def virus_scan_detail_view(request, file_name):
     scan = VirusScan.objects.filter(file_name=file_name, user=request.user).order_by('-scanned_at').first()
     sha = scan.scan_info.sha256
-    api_url = request.build_absolute_uri(f"/api/scaninfos/{sha}/")
+    api_url = f"https://vulntracker-production.up.railway.app/api/scaninfos/{sha}/"
     scan_info_data = None
     response = requests.get(api_url)
     if response.status_code == 200:
