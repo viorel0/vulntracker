@@ -29,7 +29,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vulntracker-production.up.railway.app']
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://vulntracker-production.up.railway.app'
+]
 
 LOGOUT_REDIRECT_URL = '/login/'
 # Application definition
