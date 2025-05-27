@@ -13,25 +13,29 @@
     </form>
     <h3 class="text-xl font-bold mb-4">Your Recent Scans</h3>
     <table class="w-full text-left border-collapse">
-        <thead>
+    <thead class="bg-white sticky top-0 z-10">
             <tr class="border-b">
                 <th class="py-2">File Name</th>
                 <th class="py-2">Date</th>
             </tr>
         </thead>
-        <tbody>
-            {% for scan in scans %}
-            <tr class="border-b">
-                <td class="py-2">
-                    <a href="{% url 'virus_scan_detail' scan.file_name %}" class="text-blue-700 hover:underline">{{ scan.file_name }}</a>
-                </td>
-                <td class="py-2">{{ scan.scanned_at|date:"Y-m-d H:i" }}</td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="3" class="text-gray-500 py-2">No scans yet.</td></tr>
-            {% endfor %}
-        </tbody>
     </table>
+    <div class="overflow-y-auto" style="max-height: 300px;">
+        <table class="w-full text-left border-collapse">
+            <tbody>
+                {% for scan in scans %}
+                <tr class="border-b">
+                    <td class="py-2">
+                        <a href="{% url 'virus_scan_detail' scan.file_name %}" class="text-blue-700 hover:underline">{{ scan.file_name }}</a>
+                    </td>
+                    <td class="py-2">{{ scan.scanned_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-gray-500 py-2">No scans yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>
 const dropArea = document.getElementById('drop-area');
