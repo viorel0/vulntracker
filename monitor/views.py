@@ -207,22 +207,25 @@ def virus_scan_view(request):
 @login_required
 def virus_scan_detail_view(request, file_name):
     scan = VirusScan.objects.filter(file_name=file_name, user=request.user).order_by('-scanned_at').first()
+    sha = scan.scan_info.sha256
+    api_url = f"https://vulntracker-production.up.railway.app/api/scaninfos/{sha}/"
     scan_info_data = None
-    if scan and scan.scan_info:
-        info = scan.scan_info
+    response = requests.get(api_url,timeout=10)
+    if response.status_code == 200:
+        results = response.json()
         scan_info_data = {
-            'id': info.id,
-            'sha256': info.sha256,
-            'file_name': info.file_name,
-            'type': info.type,
-            'size': info.size,
-            'md5': info.md5,
-            'sha1': info.sha1,
-            'last_analysis_stats': info.last_analysis_stats,
-            'last_analysis_date': info.last_analysis_date,
-            'signature': info.signature,
-            'virustotal_link': info.virustotal_link,
-        }
+            'id': results[0].get("id"),
+            'sha256': results[0].get("sha256"),
+            'file_name': results[0].get("file_name"),
+            'type': results[0].get("type"),
+            'size': results[0].get("size"),
+            'md5': results[0].get("md5"),
+            'sha1': results[0].get("sha1"),
+            'last_analysis_stats': results[0].get("last_analysis_stats"),
+            'last_analysis_date': results[0].get("last_analysis_date"),
+            'signature': results[0].get("signature"),
+            'virustotal_link': results[0].get("virustotal_link")
+            }
     return render(request, 'virus_scan_detail.html', {
         'scan': scan,
         'scan_info_data': scan_info_data,
