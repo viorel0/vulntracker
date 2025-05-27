@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}CVE Details{% endblock %}
+{% block content %}
+<div class="bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">CVE Details</h2>
+    <div class="mb-5 flex items-center flex-wrap">
+        <span class="font-semibold">CVE ID:</span>
+        <span class="text-blue-700 font-mono">{{ cve_id }}</span>
+        <span class="font-semibold ml-2">Published: </span>
+        <span class="text-gray-700">{{ details.published|date:"Y-m-d H:i" }}</span>
+        <span class="font-semibold ml-2">Last Modified: </span>
+        <span class="text-gray-700">{{ details.last_modified|date:"Y-m-d H:i" }}</span>
+        <span class="font-semibold ml-2">Severity Score: </span>
+        <span class="text-red-600">{{ details.cvss_v31_base_score }}</span>
+        <span class="font-semibold ml-2">Severity: </span>
+        <span class="text-gray-700">{{ details.cvss_v31_base_severity }}</span>
+        <form method="post" action="" class="ml-4">
+            {% csrf_token %}
+            <button type="submit" name="favorite" value="toggle" class="focus:outline-none">
+                {% if is_favorite %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#facc15" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 inline-block align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.036 6.261a1 1 0 00.95.69h6.588c.969 0 1.371 1.24.588 1.81l-5.33 3.872a1 1 0 00-.364 1.118l2.036 6.261c.3.921-.755 1.688-1.54 1.118l-5.33-3.872a1 1 0 00-1.176 0l-5.33 3.872c-.784.57-1.838-.197-1.54-1.118l2.036-6.261a1 1 0 00-.364-1.118l-5.33-3.872c-.783-.57-.38-1.81.588-1.81h6.588a1 1 0 00.95-.69l2.036-6.261z" />
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#facc15" class="w-6 h-6 inline-block align-middle">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.036 6.261a1 1 0 00.95.69h6.588c.969 0 1.371 1.24.588 1.81l-5.33 3.872a1 1 0 00-.364 1.118l2.036 6.261c.3.921-.755 1.688-1.54 1.118l-5.33-3.872a1 1 0 00-1.176 0l-5.33 3.872c-.784.57-1.838-.197-1.54-1.118l2.036-6.261a1 1 0 00-.364-1.118l-5.33-3.872c-.783-.57-.38-1.81.588-1.81h6.588a1 1 0 00.95-.69l2.036-6.261z" />
+                    </svg>
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    <div class="mb-4">
+        <span class="font-semibold">Description:</span>
+        <p class="mt-2 text-gray-800">{{ details.description }}</p>
+    </div>
+    <div class="mb-4">
+        <span class="font-semibold">Weaknesses (CWE):</span>
+        <span class="text-gray-700">
+            {% if details.weaknesses %}
+                {{ details.weaknesses|join:", " }}
+            {% else %}
+                None listed
+            {% endif %}
+        </span>
+    </div>
+    <div class="mb-4">
+        <span class="font-semibold">References:</span>
+        <ul class="list-disc ml-6">
+            {% for ref in details.references %}
+                <li><a href="{{ ref }}" target="_blank" class="text-blue-600 hover:underline">{{ ref }}</a></li>
+            {% empty %}
+                <li>No references listed.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="https://nvd.nist.gov/vuln/detail/{{ cve_id }}" target="_blank" class="text-blue-600 hover:underline">View on NVD</a>
+</div>
+
+
+<div class="bg-gray-50 p-6 rounded shadow">
+    <h3 class="text-xl font-bold mb-4">Comments</h3>
+    <form method="post" class="mb-6">
+        {% csrf_token %}
+        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded p-2 mb-2" placeholder="Add your comment..."></textarea>
+        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Post Comment</button>
+    </form>
+    <div>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="mb-4 p-3 bg-white rounded shadow-sm">
+                    <div class="flex items-center mb-1">
+                        <span class="font-semibold text-blue-700">{{ comment.user.username }}</span>
+                        <span class="text-xs text-gray-500 ml-2">{{ comment.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <div class="text-gray-800">{{ comment.comment }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-gray-500">No comments yet. Be the first to comment!</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

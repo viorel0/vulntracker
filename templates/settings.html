@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="max-w-lg bg-white p-7 ">
+    <h2 class="text-3xl font-bold mb-6">Account Settings</h2>
+    {% if success %}
+        <div class="text-green-600 text-center mb-4">{{ success }}</div>
+    {% endif %}
+    {% if error %}
+        <div class="text-red-600 text-center mb-4">{{ error }}</div>
+    {% endif %}
+    <div class="space-y-8">
+        <div class="flex items-center">
+            <span class="font-medium w-50">Joined: {{user.date_joined}}</span>
+        </div>
+        <div class="flex items-center">
+            <span class="font-medium w-50">Last login: {{user.last_login}}</span>
+        </div>
+        <div class="flex items-center">
+            <span class="font-medium w-32">Username:</span>
+            {% if edit_username %}
+                <form method="post" class="flex items-center w-full">
+                    {% csrf_token %}
+                    <input type="text" name="username" value="{{ user.username }}" class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    <button type="submit" name="update_username" class="ml-2 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm">Update</button>
+                    <button type="submit" name="cancel_edit" class="ml-2 px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-sm">Cancel</button>
+                </form>
+            {% else %}
+                <span class="px-3 py-2">{{ user.username }}</span>
+                <form method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" name="edit_username" class="ml-4 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">Edit</button>
+                </form>
+            {% endif %}
+        </div>
+        <div class="flex items-center">
+            <span class="font-medium w-32">Email:</span>
+            {% if edit_email %}
+                <form method="post" class="flex items-center w-full">
+                    {% csrf_token %}
+                    <input type="email" name="email" value="{{ user.email }}" class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    <button type="submit" name="update_email" class="ml-2 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm">Update</button>
+                    <button type="submit" name="cancel_edit_email" class="ml-2 px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-sm">Cancel</button>
+                </form>
+            {% else %}
+                {% if user.email %}
+                    <span class="px-3 py-2">{{ user.email }}</span>
+                {% else %}
+                    <span class="px-3 py-2 text-red-600">No email set</span>
+                {% endif %}
+                <form method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" name="edit_email" class="ml-4 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">Edit</button>
+                </form>
+            {% endif %}
+        </div>
+        <div class="flex items-center">
+            <span class="font-medium w-32">Password:</span>
+            {% if edit_password %}
+                <form method="post" class="flex items-center w-full">
+                    {% csrf_token %}
+                    <input type="password" name="password" id="password-input" value="{{ password_value|default:'' }}" class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    <button type="button" onclick="togglePassword()" class="ml-2 px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm">Show</button>
+                    <button type="submit" name="update_password" class="ml-2 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm">Update</button>
+                    <button type="submit" name="cancel_edit_password" class="ml-2 px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-sm">Cancel</button>
+                </form>
+                <script>
+                function togglePassword() {
+                    var input = document.getElementById('password-input');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                    } else {
+                        input.type = 'password';
+                    }
+                }
+                </script>
+            {% else %}
+                <span class="px-3 py-2 ">********</span>
+                <form method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" name="edit_password" class="ml-4 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm">Edit</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

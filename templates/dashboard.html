@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <form method="get" class="mb-6">
+        {% if error_message %}
+            <script>alert("{{ error_message }}");</script>
+        {% endif %}
+        <input type="text" name="cwe_id" placeholder="CWE-ID" value="{{ cwe_id }}" class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-64" />
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="Enter keyword (e.g. wordpress)" class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-64" />
+        <label for="start_date" class="ml-2">Start date:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date|default:'' }}" class="px-2 py-1 border border-gray-300 rounded" />
+        <label for="end_date" class="ml-2">End date:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date|default:'' }}" class="px-2 py-1 border border-gray-300 rounded" />
+        <label for="severity" class="ml-2">Severity:</label>
+        <select name="severity" id="severity" class="px-2 py-1 border border-gray-300 rounded">
+            <option value="CRITICAL" {% if severity == 'CRITICAL' %}selected{% endif %}>CRITICAL</option>
+            <option value="HIGH" {% if severity == 'HIGH' %}selected{% endif %}>HIGH</option>
+            <option value="MEDIUM" {% if severity == 'MEDIUM' %}selected{% endif %}>MEDIUM</option>
+            <option value="LOW" {% if severity == 'LOW' %}selected{% endif %}>LOW</option>
+        </select>
+        <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Filter</button>
+    </form>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var startInput = document.getElementById('start_date');
+        var endInput = document.getElementById('end_date');
+        function updateEndDateLimits() {
+            if (startInput.value) {
+                endInput.min = startInput.value;
+                var max = new Date(startInput.value);
+                max.setDate(max.getDate() + 120);
+                endInput.max = max.toISOString().slice(0,10);
+                if (endInput.value && (endInput.value < endInput.min || endInput.value > endInput.max)) {
+                    endInput.value = endInput.min;
+                }
+            } else {
+                endInput.min = '';
+                endInput.max = '';
+            }
+        }
+        startInput.addEventListener('change', updateEndDateLimits);
+        updateEndDateLimits();
+    });
+    </script>
+    <h3 class="text-xl font-bold mb-2">{{severity}} Severity CVEs for: <span class="text-blue-700">{{ keyword }}</span></h3>
+    <ul class="list-disc pl-6">
+        {% for cve in page_obj %}
+            <li class="mb-2">
+                <a href="{% url 'aboutcve' cve.id %}" class="text-blue-600 hover:underline font-semibold">{{ cve.id }}</a>:
+                <span class="inline-block break-words" title="{{ cve.description }}">{{ cve.description }}</span>
+            </li>
+        {% empty %}
+            <li class="text-red-600">No CVEs found for this keyword, date range, and severity.</li>
+        {% endfor %}
+    </ul>
+    <div class="flex justify-center mt-6 space-x-2">
+        {% if page_obj.has_previous %}
+            <a href="?keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&severity={{ severity }}&page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
+        {% endif %}
+        <span class="px-3 py-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&severity={{ severity }}&page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

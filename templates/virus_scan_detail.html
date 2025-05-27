@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Scan Details{% endblock %}
+{% block content %}
+<div class="bg-white p-8">
+    <h2 class="text-2xl font-bold mb-4">Scan Details</h2>
+    <div class="mb-4">
+        <span class="font-semibold">File Name:</span> <span class="font-mono">{{ scan.file_name }}</span>
+    </div>
+    <div class="mb-4">
+        <span class="font-semibold">Scanned At:</span> <span class="font-mono">{{ scan.scanned_at|date:"Y-m-d H:i" }}</span>
+    </div>
+    {% if scan_info_data %}
+        <div class="mb-2"><strong>File Name:</strong> {{ scan_info_data.file_name }}</div>
+        <div class="mb-2"><strong>SHA256:</strong> {{ scan_info_data.sha256 }}</div>
+        <div class="mb-2"><strong>MD5:</strong> {{ scan_info_data.md5 }}</div>
+        <div class="mb-2"><strong>SHA1:</strong> {{ scan_info_data.sha1 }}</div>
+        <div class="mb-2"><strong>Type:</strong> {{ scan_info_data.type }}</div>
+        <div class="mb-2"><strong>Size:</strong> {{ scan_info_data.size }}</div>
+        <div class="mb-2"><strong>Last Analysis Date:</strong> {{ scan_info_data.last_analysis_date }}</div>
+        <div class="mb-2"><strong>Signature:</strong> {{ scan_info_data.signature }}</div>
+        <div class="mb-2"><strong>VirusTotal Link:</strong> <a href="{{ scan_info_data.virustotal_link }}" class="text-blue-600 hover:underline" target="_blank">View</a></div>
+        {% if scan_info_data.last_analysis_stats %}
+            <div class="mb-2"><strong>Last Analysis Stats:</strong></div>
+            <ul class="ml-4">
+                <li>Malicious: {{ scan_info_data.last_analysis_stats.malicious }}</li>
+                <li>Suspicious: {{ scan_info_data.last_analysis_stats.suspicious }}</li>
+                <li>Harmless: {{ scan_info_data.last_analysis_stats.harmless }}</li>
+                <li>Undetected: {{ scan_info_data.last_analysis_stats.undetected }}</li>
+                <li>Failure: {{ scan_info_data.last_analysis_stats.failure }}</li>
+                <li>Timeout: {{ scan_info_data.last_analysis_stats.timeout }}</li> 
+            </ul>
+        {% endif %}
+    {% endif %}
+    <a href="{% url 'virus_scan' %}" class="text-blue-600 hover:underline">&larr; Back to Scan History</a>
+</div>
+{% endblock %}

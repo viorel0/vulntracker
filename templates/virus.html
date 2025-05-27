@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}VirusTotal File Scan{% endblock %}
+{% block content %}
+<div class="bg-white p-8">
+    <h2 class="text-2xl font-bold mb-4">Scan a File with VirusTotal</h2>
+    <form id="file-upload-form" method="post" enctype="multipart/form-data" class="mb-6 border-2 border-dashed border-gray-300 rounded p-6 flex flex-col items-center justify-center" style="min-height: 180px;">
+        {% csrf_token %}
+        <input type="file" name="file" id="file-input" class="hidden" onchange="handleFileSelect(event)">
+        <div id="drop-area" class="w-full h-32 flex flex-col items-center justify-center cursor-pointer">
+            <span id="drop-text" class="text-gray-500">Drag & drop a file here or click to select</span>
+        </div>
+        <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Scan File</button>
+    </form>
+    <h3 class="text-xl font-bold mb-4">Your Recent Scans</h3>
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="border-b">
+                <th class="py-2">File Name</th>
+                <th class="py-2">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for scan in scans %}
+            <tr class="border-b">
+                <td class="py-2">
+                    <a href="{% url 'virus_scan_detail' scan.file_name %}" class="text-blue-700 hover:underline">{{ scan.file_name }}</a>
+                </td>
+                <td class="py-2">{{ scan.scanned_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-gray-500 py-2">No scans yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+const dropArea = document.getElementById('drop-area');
+const fileInput = document.getElementById('file-input');
+const dropText = document.getElementById('drop-text');
+dropArea.addEventListener('click', () => fileInput.click());
+dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.classList.add('bg-blue-50');
+    dropText.textContent = 'Drop file here...';
+});
+dropArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dropArea.classList.remove('bg-blue-50');
+    dropText.textContent = 'Drag & drop a file here or click to select';
+});
+dropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropArea.classList.remove('bg-blue-50');
+    fileInput.files = e.dataTransfer.files;
+    dropText.textContent = fileInput.files[0].name;
+});
+function handleFileSelect(e) {
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const maxSize = 650 * 1024 * 1024;
+        if (file.size > maxSize) {
+            alert("File is too large. Maximum allowed size is 650MB.");
+            fileInput.value = "";
+            dropText.textContent = "Drag & drop a file here or click to select";
+            return;
+        }
+        dropText.textContent = file.name;
+    }
+}
+</script>
+{% endblock %}
