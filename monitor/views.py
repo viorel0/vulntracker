@@ -7,7 +7,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.core.cache import cache
-from .apicall import get_cves, get_cve_details, scan_file_virustotal,get_virustotal_file_info
+from .apicall import get_cves, get_cve_details, scan_file_virustotal
 from .models import FavoriteCVE, CVEComment, VirusScan, ScanInfo
 from datetime import datetime, timedelta
 import requests
@@ -207,8 +207,22 @@ def virus_scan_view(request):
 @login_required
 def virus_scan_detail_view(request, file_name):
     scan = VirusScan.objects.filter(file_name=file_name, user=request.user).order_by('-scanned_at').first()
-    sha = scan.scan_info.sha256
-    scan_info_data=get_virustotal_file_info(sha)
+    scan_info_data = None
+    if scan and scan.scan_info:
+        info = scan.scan_info
+        scan_info_data = {
+            'id': info.id,
+            'sha256': info.sha256,
+            'file_name': info.file_name,
+            'type': info.type,
+            'size': info.size,
+            'md5': info.md5,
+            'sha1': info.sha1,
+            'last_analysis_stats': info.last_analysis_stats,
+            'last_analysis_date': info.last_analysis_date,
+            'signature': info.signature,
+            'virustotal_link': info.virustotal_link,
+        }
     return render(request, 'virus_scan_detail.html', {
         'scan': scan,
         'scan_info_data': scan_info_data,
