@@ -130,3 +130,26 @@ def scan_file_virustotal(file_obj):
             return {'error': f'VirusTotal error: {response.status_code} {response.text}'}
     except Exception as e:
         return {'error': str(e)}
+    
+
+def get_virustotal_file_info(sha256):
+    api_url = requests.get(f"https://vulntracker-production.up.railway.app/api/scaninfos/{sha256}/")
+    scan_info_data = None
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        results = response.json()
+        scan_info_data = {
+            'id': results[0].get("id"),
+            'sha256': results[0].get("sha256"),
+            'file_name': results[0].get("file_name"),
+            'type': results[0].get("type"),
+            'size': results[0].get("size"),
+            'md5': results[0].get("md5"),
+            'sha1': results[0].get("sha1"),
+            'last_analysis_stats': results[0].get("last_analysis_stats"),
+            'last_analysis_date': results[0].get("last_analysis_date"),
+            'signature': results[0].get("signature"),
+            'virustotal_link': results[0].get("virustotal_link")
+            }
+        
+    return scan_info_data
