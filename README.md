@@ -17,7 +17,7 @@ VulnTracker is a Django-based web application designed for tracking software vul
 ## 🧪 REST API Endpoints
 - GET /api/scaninfos — Returns all scan records.
 
-- GET /api/scaninfos/<hash> — Returns details for a specific scan based on the SHA256 hash.
+- GET /api/scaninfos/hash — Returns details for a specific scan based on the SHA256 hash.
 
 ## 🧰 Technologies Used
 - Django – Web framework
