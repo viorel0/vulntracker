@@ -1,5 +1,8 @@
 # VulnTracker 🔍
-VulnTracker is a Django-based web application designed for tracking software vulnerabilities. It uses Supabase for authentication and stores vulnerability data in a PostgreSQL database. This tool helps teams organize, analyze, and visualize CVE-related data for better vulnerability management.
+VulnTracker is a web application developed using Python with  Django framework. Its main purpose is to help users find and manage information about software security vulnerabilities, known as CVEs (Common Vulnerabilities and Exposures).
+The app also allows users to upload files (up to 650 MB) and scan them using the VirusTotal service, which checks the file against multiple antivirus engines. After the scan, users can view the results to see if any threats were detected.
+In addition to scanning, users can browse a list of vulnerabilities, save important CVEs to their favorites for quick access, and post comments to discuss solutions or share opinions with others.
+The application uses a PostgreSQL database provided by Supabase for storing data and handling user authentication.
 
 ## ✨ Features
 - 🔍 Search and filter CVEs by ID, keywords, severity, or publication date.
