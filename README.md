@@ -73,3 +73,18 @@ python manage.py runserver
 
 ```
 http://127.0.0.1:8000/
+```
+
+## Screenshots from webpage
+<img width="1919" height="1039" alt="login_page" src="https://github.com/user-attachments/assets/61664121-7be1-43fc-b896-54056854694c" />
+<img width="1919" height="1040" alt="register_page" src="https://github.com/user-attachments/assets/eedc8ae9-6202-432d-9736-c5f4995929bb" />
+<img width="1919" height="1037" alt="registration_successful_page" src="https://github.com/user-attachments/assets/2775d8fd-6741-4678-b700-4e8b589cecb4" />
+<img width="1919" height="1035" alt="dashboard" src="https://github.com/user-attachments/assets/21757d66-6390-4ec7-b401-19bc1981494d" />
+<img width="1917" height="1037" alt="cve_detail_page" src="https://github.com/user-attachments/assets/d66f6a0e-48c2-4727-b5ce-85768b60f516" />
+<img width="1919" height="1038" alt="faorites_cve" src="https://github.com/user-attachments/assets/416f22e1-87ee-4467-9e3c-5a908b5b0536" />
+<img width="1919" height="1038" alt="virus_scan_page" src="https://github.com/user-attachments/assets/efd21fa2-1401-4d8c-ae08-c5c2943fc567" />
+<img width="1919" height="1035" alt="virus_scan_detailscan" src="https://github.com/user-attachments/assets/53286f5a-ea36-4d04-beef-6c8bd039bb1e" />
+<img width="1919" height="1036" alt="settings_page" src="https://github.com/user-attachments/assets/b14e1890-15a4-4f6f-b2f8-b12852ecb18d" />
+
+
+
