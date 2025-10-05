@@ -1,4 +1,4 @@
-# [Check it out!](www.vulntracker.up.railway.app)
+# [Check it out!](https://vulntracker.up.railway.app)
 
 # VulnTracker 🔍
 VulnTracker is a web application developed using Python with  Django framework. Its main purpose is to help users find and manage information about software security vulnerabilities, known as CVEs (Common Vulnerabilities and Exposures).
