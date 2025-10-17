@@ -32,7 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://vulntracker-production.up.railway.app'
+    'https://vulntracker.up.railway.app/'
 ]
 
 LOGOUT_REDIRECT_URL = '/login/'
@@ -93,7 +93,20 @@ DATABASES = {
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
-VIRUSTOTAL_API_KEY=os.environ.get('VIRUSTOTAL_API_KEY')
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('NAME'),
+#         'USER': os.environ.get('USER'),
+#         'PASSWORD': os.environ.get('PASSWORD'),
+#         'HOST': os.environ.get('HOST'),
+#         'PORT': os.environ.get('PORT'),
+#     }
+# }
+
+
+VIRUSTOTAL_API_KEY = os.environ.get('VIRUSTOTAL_API_KEY')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
