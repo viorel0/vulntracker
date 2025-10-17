@@ -32,7 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://vulntracker.up.railway.app/'
+    'https://vulntracker.up.railway.app'
 ]
 
 LOGOUT_REDIRECT_URL = '/login/'
